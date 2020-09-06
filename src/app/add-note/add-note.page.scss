@@ -1,0 +1,71 @@
+.addNoteContainer {
+  background-color: #121212 !important;
+  color: white !important;
+  height: 100%;
+  overflow: auto !important;
+}
+.deleteButton {
+  margin-right: 10px;
+}
+.deleteIcon {
+  width: 1.5em !important;
+  height: 1.5em !important;
+}
+.titleInput {
+  font-size: 18px;
+}
+.menuIcon {
+  width: 1.5em !important;
+  height: 1.5em !important;
+}
+.listItem {
+  white-space: pre-line !important;
+  word-break: break-word !important;
+}
+.closeBtn {
+  opacity: 0.4 !important;
+  margin-left: 16px !important;
+}
+.addNoteFooter {
+  background-color: #121212 !important;
+  color: white !important;
+}
+.checkedItemsList {
+  border-top: 1px solid grey !important;
+  opacity: 0.5;
+}
+.ionItem {
+  --padding-start: 0px;
+  --ripple-color: white;
+  --color: white;
+  --background: #121212;
+}
+.checkedListItem {
+  --ripple-color: white;
+  --color: white;
+  --background: #121212;
+}
+.dragHandle {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+ion-checkbox {
+  --background: #121212 !important;
+  --border-color: white;
+}
+.addBtn {
+  --background: #121212 !important;
+}
+.ripple-parent {
+  position: relative;
+  overflow: hidden;
+}
+ion-reorder {
+  margin-right: 0.8em !important;
+}
+.editIcon {
+  z-index: 1000;
+}
+ion-checkbox .item-cover {
+  display: none !important;
+}

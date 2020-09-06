@@ -1,0 +1,25 @@
+.backIcon {
+  height: 1.5em !important;
+  width: 1.5em !important;
+}
+.backButton {
+  padding: 5px !important;
+}
+.cardContainer {
+  overflow: scroll;
+  background-color: #121212 !important;
+  height: 100%;
+}
+#container {
+  text-align: center;
+  color: white !important;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.searchIcon {
+  width: 63px;
+  height: 63px;
+}

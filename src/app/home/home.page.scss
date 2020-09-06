@@ -1,0 +1,56 @@
+.cardContainer {
+  overflow: scroll;
+  background-color: #121212 !important;
+  height: 100%;
+}
+.cardContent {
+  font-size: 1rem !important;
+}
+.card {
+  max-height: 200px;
+}
+.selected {
+  border: 1px solid white;
+}
+#container {
+  text-align: center;
+  color: white !important;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.searchButton {
+  margin-right: 12px;
+}
+.searchIcon {
+  width: 1.5em !important;
+  height: 1.5em !important;
+}
+.closeBtn {
+  margin-left: 10px;
+  padding: 5px;
+}
+.selectCount {
+  margin-left: 2px;
+  margin-top: 8px;
+}
+.ribbon {
+  height: 0.3rem;
+}
+.checkListLabel {
+  opacity: 0.4;
+}
+.checkListIndicator {
+  --background: #222428;
+  --padding-start: 0px;
+  --color: white;
+}
+.toolBar {
+  --background: #121212;
+  --color: white;
+}
+.animateTime {
+  animation-duration: 0.5s !important;
+}

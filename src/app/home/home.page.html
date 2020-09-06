@@ -1,0 +1,235 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="toolBar">
+    <ion-title *ngIf="!deleteMode">
+      Notes
+    </ion-title>
+    <ion-buttons
+      slot="start"
+      *ngIf="deleteMode"
+      class="closeBtn ion-activatable ripple-parent animated animateTime zoomIn"
+      (click)="resetDeleteMode()"
+    >
+      <ion-icon
+        *ngIf="deleteMode"
+        class="searchIcon"
+        name="close-outline"
+        color="primary"
+      ></ion-icon>
+      <ion-ripple-effect></ion-ripple-effect>
+    </ion-buttons>
+    <ion-label *ngIf="deleteMode" class="selectCount" color="primary"
+      >{{deleteList.length}}</ion-label
+    >
+    <ion-buttons
+      slot="end"
+      class="searchButton ion-activatable ripple-parent"
+      (click)="searchNotes()"
+    >
+      <ion-icon
+        *ngIf="!deleteMode"
+        class="searchIcon"
+        name="search-outline"
+      ></ion-icon>
+      <ion-ripple-effect></ion-ripple-effect>
+    </ion-buttons>
+
+    <ion-buttons
+      slot="end"
+      class="searchButton animated animateTime zoomIn"
+      *ngIf="deleteMode"
+      (click)="selectAllCardsToDelete()"
+    >
+      <ion-icon
+        class="searchIcon"
+        color="primary"
+        name="checkmark-outline"
+      ></ion-icon>
+    </ion-buttons>
+
+    <ion-buttons
+      slot="end"
+      class="searchButton animated animateTime zoomIn"
+      *ngIf="deleteMode"
+      (click)="deleteNotes()"
+    >
+      <ion-icon class="searchIcon" src="assets/icon/delete.svg"></ion-icon>
+    </ion-buttons>
+    <ion-buttons
+      slot="end"
+      class="searchButton ion-activatable ripple-parent"
+      [matMenuTriggerFor]="menu"
+    >
+      <ion-icon
+        name="ellipsis-vertical-sharp"
+        class="searchIcon"
+        [color]="deleteMode?'primary':null"
+      ></ion-icon>
+      <ion-ripple-effect></ion-ripple-effect>
+    </ion-buttons>
+
+    <mat-menu #menu="matMenu">
+      <button
+        class="ion-activatable ripple-parent"
+        mat-menu-item
+        (click)="importNotes()"
+      >
+        Import<ion-ripple-effect></ion-ripple-effect>
+      </button>
+      <button
+        class="ion-activatable ripple-parent"
+        mat-menu-item
+        (click)="backup()"
+      >
+        Export<ion-ripple-effect></ion-ripple-effect>
+      </button>
+      <button
+        class="ion-activatable ripple-parent"
+        mat-menu-item
+        (click)="toggleView()"
+      >
+        {{viewBtnText}}<ion-ripple-effect></ion-ripple-effect>
+      </button>
+    </mat-menu>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="container" *ngIf="cards.length === 0">
+    <p>
+      Your notes appear here, to add click on + button
+    </p>
+  </div>
+  <div class="cardContainer">
+    <!-- Expanded view-->
+    <div *ngIf="cards.length > 0 && !compactView">
+      <ion-card
+        class="animated slideInUp card ion-activatable ripple-parent"
+        [class.selected]="!isAddedForDelete(lst)"
+        *ngFor="let lst of cards"
+        style="background-color: #222428; color: white; outline: none;"
+        ion-long-press
+        (press)="pressed(lst)"
+        (click)="deleteMode? addToDeleteList(lst):add(lst)"
+        (pressup)="released()"
+      >
+        <!-- <div
+          class="w-100 ribbon"
+          rcRandomColor
+          [bgColor]="['#dc3545', '#28a745', '#ffc107', '#007bff']"
+        >
+          &nbsp;
+        </div> -->
+        <ion-card-header>
+          <ion-card-title style="color: white; opacity: 1;"
+            >{{lst.title}}</ion-card-title
+          >
+        </ion-card-header>
+
+        <ion-card-content style="white-space: pre-line;" class="cardContent">
+          {{lst.description}}
+          <ion-item *ngIf="lst.isCheckList" disabled class="checkListIndicator">
+            <ion-checkbox mode="ios" checked="true"></ion-checkbox>
+            <ion-label>Checklist</ion-label>
+          </ion-item>
+        </ion-card-content>
+        <ion-ripple-effect></ion-ripple-effect>
+      </ion-card>
+    </div>
+
+    <!-- Compact view-->
+    <ion-grid class="p-0" *ngIf="cards.length > 0 && compactView">
+      <ion-row>
+        <ion-col size="6" class="p-0">
+          <ion-card
+            class="animated slideInUp card mr-0 mb-0 ion-activatable ripple-parent"
+            [class.selected]="!isAddedForDelete(lst)"
+            *ngFor="let lst of cards; let i=index"
+            [hidden]="!(i % 2 === 0)"
+            style="background-color: #222428; color: white; outline: none;"
+            ion-long-press
+            (press)="pressed(lst)"
+            (click)="deleteMode? addToDeleteList(lst):add(lst)"
+            (pressup)="released()"
+          >
+            <!-- <div
+              class="w-100 ribbon"
+              rcRandomColor
+              [bgColor]="['#dc3545', '#28a745', '#ffc107', '#007bff']"
+            >
+              &nbsp;
+            </div> -->
+            <ion-card-header>
+              <ion-card-title style="color: white; opacity: 1;"
+                >{{lst.title}}</ion-card-title
+              >
+            </ion-card-header>
+
+            <ion-card-content
+              style="white-space: pre-line;"
+              class="cardContent"
+            >
+              {{lst.description}}
+              <ion-item
+                *ngIf="lst.isCheckList"
+                disabled
+                class="checkListIndicator"
+              >
+                <ion-checkbox mode="ios" checked="true"></ion-checkbox>
+                <ion-label>Checklist</ion-label>
+              </ion-item>
+            </ion-card-content>
+            <ion-ripple-effect></ion-ripple-effect>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6" class="p-0">
+          <ion-card
+            class="animated slideInUp card ml-2 mb-0 ion-activatable ripple-parent"
+            [class.selected]="!isAddedForDelete(lst)"
+            *ngFor="let lst of cards; let i=index"
+            [hidden]="i % 2 === 0"
+            style="background-color: #222428; color: white; outline: none;"
+            ion-long-press
+            (press)="pressed(lst)"
+            (click)="deleteMode? addToDeleteList(lst):add(lst)"
+            (pressup)="released()"
+          >
+            <!-- <div
+              class="w-100 ribbon"
+              rcRandomColor
+              [bgColor]="['#dc3545', '#28a745', '#ffc107', '#007bff']"
+            >
+              &nbsp;
+            </div> -->
+            <ion-card-header>
+              <ion-card-title style="color: white; opacity: 1;"
+                >{{lst.title}}</ion-card-title
+              >
+            </ion-card-header>
+
+            <ion-card-content
+              style="white-space: pre-line;"
+              class="cardContent"
+            >
+              {{lst.description}}
+              <ion-item
+                *ngIf="lst.isCheckList"
+                disabled
+                class="checkListIndicator"
+              >
+                <ion-checkbox mode="ios" checked="true"></ion-checkbox>
+                <ion-label>Checklist</ion-label>
+              </ion-item>
+            </ion-card-content>
+            <ion-ripple-effect></ion-ripple-effect>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="add({id:''})">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

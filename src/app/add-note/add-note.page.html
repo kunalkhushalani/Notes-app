@@ -1,0 +1,146 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end" class="deleteButton" (click)="deleteNote()">
+      <ion-icon class="deleteIcon" src="assets/icon/delete.svg"></ion-icon>
+    </ion-buttons>
+    <ion-buttons slot="end" class="menuIcon" [matMenuTriggerFor]="menu">
+      <ion-icon name="ellipsis-vertical-sharp" class="menuIcon"></ion-icon>
+    </ion-buttons>
+    <mat-menu #menu="matMenu">
+      <button
+        class="ion-activatable ripple-parent"
+        mat-menu-item
+        (click)="setNoteType()"
+        *ngIf="!isCheckList"
+      >
+        Add checkboxes<ion-ripple-effect></ion-ripple-effect>
+      </button>
+      <button
+        class="ion-activatable ripple-parent"
+        mat-menu-item
+        (click)="setNoteType()"
+        *ngIf="isCheckList"
+      >
+        Hide checkboxes<ion-ripple-effect></ion-ripple-effect>
+      </button>
+    </mat-menu>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="addNoteContainer">
+    <ion-input
+      placeholder="Title"
+      class="px-2 titleInput"
+      [(ngModel)]="title"
+      (keyup)="onEnterKeyPress($event)"
+      #titleInput
+    ></ion-input>
+    <ion-textarea
+      *ngIf="!isCheckList"
+      placeholder="Note"
+      class="px-2 textArea animated fadeIn"
+      [(ngModel)]="description"
+      autoGrow="true"
+      #descInput
+    ></ion-textarea>
+
+    <!-- Checklist -->
+    <div
+      class="w-100 px-2 animated fadeIn"
+      *ngIf="isCheckList && checkList.length !== 0"
+    >
+      <ion-reorder-group disabled="false" (ionItemReorder)="doReorder($event)">
+        <ion-item
+          *ngFor="let lst of checkList; let i=index"
+          class="ionItem"
+          lines="none"
+          [hidden]="lst.checked"
+        >
+          <ion-checkbox
+            mode="ios"
+            [(ngModel)]="checkList[i].checked"
+          ></ion-checkbox
+          ><ion-label class="listItem">{{lst.description}}</ion-label>
+          <ion-reorder slot="start"></ion-reorder>
+          <ion-buttons
+            slot="end"
+            class="closeBtn editIcon"
+            (click)="editItem(i)"
+          >
+            <ion-icon src="assets/icon/edit.svg" class="menuIcon"></ion-icon>
+          </ion-buttons>
+          <ion-buttons
+            slot="end"
+            class="menuIcon closeBtn"
+            (click)="deleteListItem(i)"
+          >
+            <ion-icon name="close" class="menuIcon"></ion-icon>
+          </ion-buttons>
+        </ion-item>
+      </ion-reorder-group>
+
+      <!-- Checkled items list -->
+      <div class="w-100 pt-4 mt-2 checkedItemsList" *ngIf="showCheckedItems()">
+        <div
+          class="w-100 pl-4 ion-activatable ripple-parent py-2"
+          (click)="checkedItemsList = !checkedItemsList"
+        >
+          <ion-icon
+            name="chevron-down-outline"
+            class="mr-1"
+            *ngIf="checkedItemsList"
+          ></ion-icon>
+          <ion-icon
+            name="chevron-up-outline"
+            class="mr-1"
+            *ngIf="!checkedItemsList"
+          ></ion-icon>
+          Checked items
+          <ion-ripple-effect></ion-ripple-effect>
+        </div>
+        <div class="checkedItemsListContainer" *ngIf="checkedItemsList">
+          <ion-item
+            *ngFor="let lst of checkList; let i=index"
+            class="animated bounceInDown checkedListItem"
+            lines="none"
+            [hidden]="!lst.checked"
+          >
+            <ion-checkbox
+              mode="ios"
+              color="success"
+              [(ngModel)]="checkList[i].checked"
+            ></ion-checkbox
+            ><ion-label class="listItem">{{lst.description}}</ion-label>
+            <ion-buttons
+              slot="end"
+              class="menuIcon closeBtn"
+              (click)="deleteListItem(i)"
+            >
+              <ion-icon name="close" class="menuIcon"></ion-icon>
+            </ion-buttons>
+          </ion-item>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-footer class="ion-no-border addNoteFooter">
+  <div class="row" *ngIf="isCheckList">
+    <div class="col-10 pr-0">
+      <ion-textarea
+        placeholder="List item..."
+        class="px-2 mt-0 textArea w-100"
+        [(ngModel)]="description"
+        rows="1"
+        #descInputForCheckList
+      ></ion-textarea>
+    </div>
+    <div class="col-2 w-100 p-0 m-0">
+      <ion-button (click)="addItem()" class="addBtn">Add</ion-button>
+    </div>
+  </div>
+</ion-footer>

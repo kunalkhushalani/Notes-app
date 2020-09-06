@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start" class="backButton" (click)="closeModal()">
+      <ion-icon class="backIcon" name="arrow-back-outline"></ion-icon>
+    </ion-buttons>
+    <ion-input
+      placeholder="Search your notes..."
+      name="noteSearch"
+      clearInput="true"
+      [(ngModel)]="searchKeyword"
+      (ionChange)="onInput($event)"
+      autofocus="true"
+    ></ion-input>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="container" *ngIf="cards.length === 0 && searchKeyword !== ''">
+    <ion-icon name="search-sharp" class="searchIcon"></ion-icon>
+    <p>
+      No matching notes
+    </p>
+  </div>
+  <div class="cardContainer">
+    <div *ngIf="cards.length > 0">
+      <ion-card
+        class="animated slideInUp card"
+        *ngFor="let lst of cards"
+        style="background-color: #222428; color: white; outline: none;"
+        (click)="add(lst)"
+      >
+        <ion-card-header>
+          <ion-card-title style="color: white; opacity: 1;"
+            >{{lst.title}}</ion-card-title
+          >
+        </ion-card-header>
+
+        <ion-card-content style="white-space: pre-line;" class="cardContent">
+          {{lst.description}}
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>
